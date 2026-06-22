@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
-{   
+{
     public GameObject[] asteroidPrefabs;
 
     public GameObject rapidFirePrefab;
@@ -9,6 +9,15 @@ public class Spawner : MonoBehaviour
     public float spawnRate = 1f;
 
     float timer = 0f;
+
+    void Start()
+{
+    spawnRate = 1f;
+
+    timer = 0f;
+
+    Asteroid.globalSpeed = Asteroid.defaultSpeed;
+}
 
     void Update()
     {
@@ -25,32 +34,40 @@ public class Spawner : MonoBehaviour
         {
             spawnRate -= 0.001f * Time.deltaTime;
         }
+
         Asteroid.globalSpeed += 0.4f * Time.deltaTime;
     }
 
     void SpawnAsteroid()
     {
         float randomX = Random.Range(-8f, 8f);
-        Debug.Log(asteroidPrefabs.Length);
-        Debug.Log(asteroidPrefabs[0]);
 
         Vector2 spawnPos = new Vector2(randomX, 20f);
 
-        GameObject randomAsteroid = asteroidPrefabs[Random.Range(0, asteroidPrefabs.Length)];
+        GameObject randomAsteroid =
+            asteroidPrefabs[
+                Random.Range(0, asteroidPrefabs.Length)
+            ];
 
-        GameObject asteroid = Instantiate(randomAsteroid, spawnPos, Quaternion.identity);
+        GameObject asteroid =
+            Instantiate(
+                randomAsteroid,
+                spawnPos,
+                Quaternion.identity
+            );
 
         float randomSize = Random.Range(0.5f, 1.3f);
 
-        asteroid.transform.localScale = Vector3.one * randomSize;
+        asteroid.transform.localScale =
+            Vector3.one * randomSize;
 
         if(Random.value < 0.05f)
-            {
-    Instantiate(
-        rapidFirePrefab,
-        spawnPos,
-        Quaternion.identity
-    );
-            }
+        {
+            Instantiate(
+                rapidFirePrefab,
+                spawnPos,
+                Quaternion.identity
+            );
+        }
     }
 }

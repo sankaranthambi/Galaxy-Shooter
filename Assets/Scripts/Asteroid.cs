@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {   CameraShake camShake;
-    public static float globalSpeed = 5f;
+    public static float globalSpeed;
+
+    public const float defaultSpeed = 5f;
     public AudioClip hitSound;
     public AudioClip destroySound;
 

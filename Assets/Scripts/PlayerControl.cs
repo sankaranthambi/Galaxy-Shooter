@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    public FixedJoystick joystick;
+
     public float speed = 10f;
 
     public GameObject laserPrefab;
@@ -14,6 +16,8 @@ public class PlayerControl : MonoBehaviour
 
     bool rapidFireActive = false;
 
+    public bool fireButtonPressed = false;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -23,8 +27,8 @@ public class PlayerControl : MonoBehaviour
     {
         // MOVEMENT
 
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
+        float moveX = joystick.Horizontal;
+        float moveY = joystick.Vertical;
 
         transform.Translate(
             new Vector2(moveX, moveY) *
@@ -45,16 +49,17 @@ public class PlayerControl : MonoBehaviour
 
         // SHOOTING
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) || fireButtonPressed)
         {
+            fireButtonPressed = false;
+
             if(rapidFireActive)
-            {
-                Invoke("Shoot", 0f);
+                {
 
-                Invoke("Shoot", 0.1f);
-
-                Invoke("Shoot", 0.2f);
-            }
+                        Invoke("Shoot", 0f);
+                        Invoke("Shoot", 0.1f);
+                        Invoke("Shoot", 0.2f);
+                }
             else
             {
                 Shoot();
@@ -74,7 +79,7 @@ public class PlayerControl : MonoBehaviour
             );
     }
 
-    void Shoot()
+    public void Shoot()
     {
         Instantiate(
             laserPrefab,
@@ -92,6 +97,7 @@ public class PlayerControl : MonoBehaviour
         if(other.CompareTag("Powerup"))
         {
             rapidFireActive = true;
+
 
             Destroy(other.gameObject);
 
